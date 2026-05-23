@@ -1,4 +1,5 @@
 # MicReady
+<img width="326" height="552" alt="image" src="https://github.com/user-attachments/assets/6bc37c64-81b7-4168-82b6-6be2f4862180" />
 
 Приложение для menu bar macOS, которое автоматически поддерживает выбранную громкость микрофона, когда запущены указанные приложения (Zoom, Teams, Google Meet и т.д.).
 
