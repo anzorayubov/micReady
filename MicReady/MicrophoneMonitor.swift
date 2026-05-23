@@ -18,6 +18,7 @@ final class MicrophoneMonitor: ObservableObject {
     @Published private(set) var availableInputDevices: [AudioInputDevice] = []
     @Published private(set) var selectedInputDeviceID = AudioInputDevice.systemDefaultID
     @Published private(set) var customInputDeviceNames: [String: String] = [:]
+    @Published private(set) var hiddenInputDeviceIDs: Set<String> = []
 
     private var timer: Timer?
     private let settingsStore: SettingsStore
@@ -37,8 +38,15 @@ final class MicrophoneMonitor: ObservableObject {
         targetMicVolume = snappedVolume(for: settingsStore.loadTargetMicVolume())
         selectedInputDeviceID = settingsStore.loadSelectedInputDeviceID()
         customInputDeviceNames = settingsStore.loadCustomInputDeviceNames()
+        hiddenInputDeviceIDs = settingsStore.loadHiddenInputDeviceIDs()
         refreshInputDevices()
         refreshMicInputVolume()
+    }
+
+    var visibleInputDevices: [AudioInputDevice] {
+        availableInputDevices.filter { device in
+            !hiddenInputDeviceIDs.contains(device.id)
+        }
     }
 
     func startMonitoring() {
@@ -77,6 +85,10 @@ final class MicrophoneMonitor: ObservableObject {
 
         refreshInputDevices()
 
+        guard deviceID == AudioInputDevice.systemDefaultID || !hiddenInputDeviceIDs.contains(deviceID) else {
+            return
+        }
+
         if let selectedDevice = availableInputDevices.first(where: { $0.id == deviceID }),
            let audioDeviceID = selectedDevice.deviceID {
             _ = audioDeviceService.setDefaultInputDevice(deviceID: audioDeviceID)
@@ -113,6 +125,30 @@ final class MicrophoneMonitor: ObservableObject {
         device.id != AudioInputDevice.systemDefaultID
     }
 
+    func canHideInputDevice(_ device: AudioInputDevice) -> Bool {
+        device.id != AudioInputDevice.systemDefaultID
+    }
+
+    func isInputDeviceHidden(_ device: AudioInputDevice) -> Bool {
+        hiddenInputDeviceIDs.contains(device.id)
+    }
+
+    func hideInputDevice(_ device: AudioInputDevice) {
+        guard canHideInputDevice(device), !hiddenInputDeviceIDs.contains(device.id) else { return }
+
+        hiddenInputDeviceIDs.insert(device.id)
+        settingsStore.saveHiddenInputDeviceIDs(hiddenInputDeviceIDs)
+
+        if selectedInputDeviceID == device.id {
+            selectInputDevice(fallbackInputDeviceID())
+        }
+    }
+
+    func showInputDevice(_ device: AudioInputDevice) {
+        guard hiddenInputDeviceIDs.remove(device.id) != nil else { return }
+        settingsStore.saveHiddenInputDeviceIDs(hiddenInputDeviceIDs)
+    }
+
     func editableInputDeviceName(for device: AudioInputDevice) -> String {
         customInputDeviceNames[device.id] ?? device.name
     }
@@ -144,7 +180,9 @@ final class MicrophoneMonitor: ObservableObject {
     }
 
     func selectedInputDeviceDisplayName() -> String {
-        let selectedDevice = availableInputDevices.first(where: { $0.id == selectedInputDeviceID }) ?? .systemDefault
+        let selectedDevice = availableInputDevices.first(where: { $0.id == selectedInputDeviceID })
+            ?? visibleInputDevices.first
+            ?? .systemDefault
         return inputDeviceDisplayName(for: selectedDevice)
     }
 
@@ -157,15 +195,12 @@ final class MicrophoneMonitor: ObservableObject {
 
         let resolvedSelectedID: String
         if selectedInputDeviceID == AudioInputDevice.systemDefaultID {
-            resolvedSelectedID = audioDeviceService.currentDefaultInputDeviceSelectionID()
-                ?? devices.first?.id
-                ?? AudioInputDevice.systemDefaultID
-        } else if devices.contains(where: { $0.id == selectedInputDeviceID }) {
+            resolvedSelectedID = fallbackInputDeviceID(in: devices)
+        } else if devices.contains(where: { $0.id == selectedInputDeviceID }),
+                  !hiddenInputDeviceIDs.contains(selectedInputDeviceID) {
             resolvedSelectedID = selectedInputDeviceID
         } else {
-            resolvedSelectedID = audioDeviceService.currentDefaultInputDeviceSelectionID()
-                ?? devices.first?.id
-                ?? AudioInputDevice.systemDefaultID
+            resolvedSelectedID = fallbackInputDeviceID(in: devices)
         }
 
         if selectedInputDeviceID != resolvedSelectedID {
@@ -218,5 +253,11 @@ final class MicrophoneMonitor: ObservableObject {
 
     private func currentDefaultDeviceID() -> String? {
         audioDeviceService.currentDefaultInputDeviceSelectionID()
+    }
+
+    private func fallbackInputDeviceID(in devices: [AudioInputDevice]? = nil) -> String {
+        let inputDevices = devices ?? availableInputDevices
+        return inputDevices.first(where: { !hiddenInputDeviceIDs.contains($0.id) })?.id
+            ?? AudioInputDevice.systemDefaultID
     }
 }

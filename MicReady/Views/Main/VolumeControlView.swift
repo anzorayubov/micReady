@@ -3,9 +3,11 @@ import SwiftUI
 struct VolumeControlView: View {
     @EnvironmentObject var monitor: MicrophoneMonitor
     @EnvironmentObject var settings: AppSettings
-    @State private var isRenamingDevices = false
+    @EnvironmentObject var inputDeviceEditing: InputDeviceEditingController
 
     var body: some View {
+        let inputDevices = inputDeviceEditing.isEditing ? monitor.availableInputDevices : monitor.visibleInputDevices
+
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 8) {
@@ -15,11 +17,11 @@ struct VolumeControlView: View {
                     Spacer()
 
                     Button {
-                        isRenamingDevices.toggle()
+                        inputDeviceEditing.toggleEditing()
                     } label: {
                         Image(systemName: "pencil")
                             .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(isRenamingDevices ? .accentColor : .secondary)
+                            .foregroundColor(inputDeviceEditing.isEditing ? .accentColor : .secondary)
                             .frame(width: 22, height: 22)
                     }
                     .buttonStyle(.plain)
@@ -27,15 +29,15 @@ struct VolumeControlView: View {
                 }
 
                 VStack(spacing: 0) {
-                    ForEach(monitor.availableInputDevices) { device in
+                    ForEach(inputDevices) { device in
                         InputDeviceRow(
                             device: device,
-                            isEditingEnabled: isRenamingDevices
+                            isEditingEnabled: inputDeviceEditing.isEditing
                         )
                             .environmentObject(monitor)
                             .environmentObject(settings)
 
-                        if device.id != monitor.availableInputDevices.last?.id {
+                        if device.id != inputDevices.last?.id {
                             Divider()
                         }
                     }
@@ -76,6 +78,11 @@ struct VolumeControlView: View {
 }
 
 private struct InputDeviceRow: View {
+    private enum Layout {
+        static let rowHeight: CGFloat = 34
+        static let nameHeight: CGFloat = 22
+    }
+
     @EnvironmentObject var monitor: MicrophoneMonitor
     @EnvironmentObject var settings: AppSettings
 
@@ -86,22 +93,41 @@ private struct InputDeviceRow: View {
     @State private var isHovered = false
 
     var body: some View {
+        let isHidden = monitor.isInputDeviceHidden(device)
+
         Group {
             if isEditingEnabled {
                 HStack(spacing: 8) {
                     Image(systemName: monitor.selectedInputDeviceID == device.id ? "largecircle.fill.circle" : "circle")
-                        .font(.system(size: 12))
+                        .font(.system(size: 14))
                         .foregroundColor(monitor.selectedInputDeviceID == device.id ? .accentColor : .secondary)
 
                     nameContent
+
+                    Spacer(minLength: 0)
+
+                    if monitor.canHideInputDevice(device) {
+                        Button {
+                            toggleHidden()
+                        } label: {
+                            Image(systemName: isHidden ? "eye.slash" : "eye")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(isHidden ? .secondary : .accentColor)
+                                .frame(width: 22, height: 22)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
+                        .help(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
+                    }
                 }
+                .opacity(isHidden ? 0.55 : 1)
             } else {
                 Button {
                     monitor.selectInputDevice(device.id)
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: monitor.selectedInputDeviceID == device.id ? "largecircle.fill.circle" : "circle")
-                            .font(.system(size: 12))
+                            .font(.system(size: 14))
                             .foregroundColor(monitor.selectedInputDeviceID == device.id ? .accentColor : .secondary)
 
                         nameContent
@@ -114,7 +140,7 @@ private struct InputDeviceRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 10)
-        .padding(.vertical, 8)
+        .frame(height: Layout.rowHeight)
         .background(isHovered ? Color(NSColor.quaternaryLabelColor).opacity(0.14) : Color.clear)
         .contentShape(Rectangle())
         .onHover { hovering in
@@ -144,15 +170,18 @@ private struct InputDeviceRow: View {
                 text: $draftName
             )
             .textFieldStyle(.plain)
-            .font(.system(size: 12))
+            .font(.system(size: 14))
+            .frame(height: Layout.nameHeight)
+            .disabled(!monitor.canRenameInputDevice(device))
             .onSubmit {
                 commitEditing()
             }
         } else {
             Text(monitor.inputDeviceDisplayName(for: device))
-                .font(.system(size: 12))
+                .font(.system(size: 14))
                 .foregroundColor(.primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: Layout.nameHeight)
                 .lineLimit(1)
         }
     }
@@ -162,5 +191,15 @@ private struct InputDeviceRow: View {
 
         monitor.renameInputDevice(device.id, to: draftName)
         draftName = monitor.editableInputDeviceName(for: device)
+    }
+
+    private func toggleHidden() {
+        commitEditing()
+
+        if monitor.isInputDeviceHidden(device) {
+            monitor.showInputDevice(device)
+        } else {
+            monitor.hideInputDevice(device)
+        }
     }
 }

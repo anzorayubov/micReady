@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             rootView: ContentView()
                 .environmentObject(MicrophoneMonitor.shared)
                 .environmentObject(AppSettings.shared)
+                .environmentObject(InputDeviceEditingController.shared)
         )
         self.popover = popover
 
@@ -93,5 +94,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         image.isTemplate = false
         return image
+    }
+}
+
+final class InputDeviceEditingController: ObservableObject {
+    static let shared = InputDeviceEditingController()
+
+    @Published private(set) var isEditing = false
+
+    private init() {}
+
+    func enableEditing() {
+        isEditing = true
+    }
+
+    func toggleEditing() {
+        isEditing.toggle()
+    }
+
+    func saveEditing() {
+        isEditing = false
     }
 }

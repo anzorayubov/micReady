@@ -4,6 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var monitor: MicrophoneMonitor
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var inputDeviceEditing: InputDeviceEditingController
     @State private var showAppPicker = false
     @State private var currentScreen: Screen = .main
 
@@ -37,6 +38,20 @@ struct ContentView: View {
                 .environmentObject(monitor)
                 .environmentObject(settings)
         }
+        .background(
+            CommandShortcutHandler(
+                onCommandE: {
+                    guard currentScreen == .main else { return false }
+                    inputDeviceEditing.enableEditing()
+                    return true
+                },
+                onCommandS: {
+                    guard inputDeviceEditing.isEditing else { return false }
+                    inputDeviceEditing.saveEditing()
+                    return true
+                }
+            )
+        )
     }
 
     private var mainContentView: some View {
@@ -65,6 +80,70 @@ struct ContentView: View {
             Divider()
 
             FooterView(showAppPicker: $showAppPicker)
+        }
+    }
+}
+
+private struct CommandShortcutHandler: NSViewRepresentable {
+    private enum KeyCode {
+        static let s: UInt16 = 1
+        static let e: UInt16 = 14
+    }
+
+    let onCommandE: () -> Bool
+    let onCommandS: () -> Bool
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onCommandE: onCommandE, onCommandS: onCommandS)
+    }
+
+    func makeNSView(context: Context) -> NSView {
+        context.coordinator.installMonitor()
+        return NSView(frame: .zero)
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.onCommandE = onCommandE
+        context.coordinator.onCommandS = onCommandS
+    }
+
+    final class Coordinator {
+        var onCommandE: () -> Bool
+        var onCommandS: () -> Bool
+        private var eventMonitor: Any?
+
+        init(onCommandE: @escaping () -> Bool, onCommandS: @escaping () -> Bool) {
+            self.onCommandE = onCommandE
+            self.onCommandS = onCommandS
+        }
+
+        deinit {
+            if let eventMonitor {
+                NSEvent.removeMonitor(eventMonitor)
+            }
+        }
+
+        func installMonitor() {
+            guard eventMonitor == nil else { return }
+
+            eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+                guard let self,
+                      event.modifierFlags
+                        .intersection(.deviceIndependentFlagsMask)
+                        .contains(.command)
+                else {
+                    return event
+                }
+
+                switch event.keyCode {
+                case KeyCode.e:
+                    return self.onCommandE() ? nil : event
+                case KeyCode.s:
+                    return self.onCommandS() ? nil : event
+                default:
+                    return event
+                }
+            }
         }
     }
 }

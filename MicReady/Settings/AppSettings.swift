@@ -163,6 +163,8 @@ final class AppSettings: ObservableObject {
             case .add: return "Добавить"
             case .renameMicrophone: return "Переименовать микрофон"
             case .renameMicrophonePlaceholder: return "Название микрофона"
+            case .hideMicrophoneSource: return "Скрыть источник"
+            case .showMicrophoneSource: return "Показать источник"
             }
         case .english, .system:
             switch key {
@@ -189,6 +191,8 @@ final class AppSettings: ObservableObject {
             case .add: return "Add"
             case .renameMicrophone: return "Rename microphone"
             case .renameMicrophonePlaceholder: return "Microphone name"
+            case .hideMicrophoneSource: return "Hide microphone source"
+            case .showMicrophoneSource: return "Show microphone source"
             }
         case .chineseSimplified:
             switch key {
@@ -215,6 +219,8 @@ final class AppSettings: ObservableObject {
             case .add: return "添加"
             case .renameMicrophone: return "重命名麦克风"
             case .renameMicrophonePlaceholder: return "麦克风名称"
+            case .hideMicrophoneSource: return "隐藏麦克风来源"
+            case .showMicrophoneSource: return "显示麦克风来源"
             }
         case .hindi:
             switch key {
@@ -241,6 +247,8 @@ final class AppSettings: ObservableObject {
             case .add: return "जोड़ें"
             case .renameMicrophone: return "माइक्रोफोन का नाम बदलें"
             case .renameMicrophonePlaceholder: return "माइक्रोफोन का नाम"
+            case .hideMicrophoneSource: return "माइक्रोफोन स्रोत छिपाएं"
+            case .showMicrophoneSource: return "माइक्रोफोन स्रोत दिखाएं"
             }
         case .spanish:
             switch key {
@@ -267,6 +275,8 @@ final class AppSettings: ObservableObject {
             case .add: return "Agregar"
             case .renameMicrophone: return "Renombrar microfono"
             case .renameMicrophonePlaceholder: return "Nombre del microfono"
+            case .hideMicrophoneSource: return "Ocultar fuente del microfono"
+            case .showMicrophoneSource: return "Mostrar fuente del microfono"
             }
         case .french:
             switch key {
@@ -293,6 +303,8 @@ final class AppSettings: ObservableObject {
             case .add: return "Ajouter"
             case .renameMicrophone: return "Renommer le microphone"
             case .renameMicrophonePlaceholder: return "Nom du microphone"
+            case .hideMicrophoneSource: return "Masquer la source du microphone"
+            case .showMicrophoneSource: return "Afficher la source du microphone"
             }
         case .arabic:
             switch key {
@@ -319,6 +331,8 @@ final class AppSettings: ObservableObject {
             case .add: return "إضافة"
             case .renameMicrophone: return "إعادة تسمية الميكروفون"
             case .renameMicrophonePlaceholder: return "اسم الميكروفون"
+            case .hideMicrophoneSource: return "إخفاء مصدر الميكروفون"
+            case .showMicrophoneSource: return "إظهار مصدر الميكروفون"
             }
         case .bengali:
             switch key {
@@ -345,6 +359,8 @@ final class AppSettings: ObservableObject {
             case .add: return "যোগ করুন"
             case .renameMicrophone: return "মাইক্রোফোনের নাম বদলান"
             case .renameMicrophonePlaceholder: return "মাইক্রোফোনের নাম"
+            case .hideMicrophoneSource: return "মাইক্রোফোন উৎস লুকান"
+            case .showMicrophoneSource: return "মাইক্রোফোন উৎস দেখান"
             }
         case .portuguese:
             switch key {
@@ -371,6 +387,8 @@ final class AppSettings: ObservableObject {
             case .add: return "Adicionar"
             case .renameMicrophone: return "Renomear microfone"
             case .renameMicrophonePlaceholder: return "Nome do microfone"
+            case .hideMicrophoneSource: return "Ocultar fonte do microfone"
+            case .showMicrophoneSource: return "Mostrar fonte do microfone"
             }
         case .urdu:
             switch key {
@@ -397,6 +415,8 @@ final class AppSettings: ObservableObject {
             case .add: return "شامل کریں"
             case .renameMicrophone: return "مائیکروفون کا نام تبدیل کریں"
             case .renameMicrophonePlaceholder: return "مائیکروفون کا نام"
+            case .hideMicrophoneSource: return "مائیکروفون ماخذ چھپائیں"
+            case .showMicrophoneSource: return "مائیکروفون ماخذ دکھائیں"
             }
         }
     }

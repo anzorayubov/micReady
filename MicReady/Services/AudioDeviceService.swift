@@ -21,7 +21,7 @@ struct AudioDeviceService {
 
     func currentDefaultInputDeviceSelectionID() -> String? {
         guard let deviceID = defaultInputDeviceID() else { return nil }
-        return String(deviceID)
+        return deviceUID(for: deviceID) ?? String(deviceID)
     }
 
     func defaultInputDeviceName() -> String? {
@@ -143,7 +143,7 @@ struct AudioDeviceService {
             }
 
             return AudioInputDevice(
-                id: String(deviceID),
+                id: deviceUID(for: deviceID) ?? String(deviceID),
                 name: name,
                 deviceID: deviceID
             )
@@ -194,6 +194,28 @@ struct AudioDeviceService {
 
         guard status == noErr, let name else { return nil }
         return name as String
+    }
+
+    private func deviceUID(for deviceID: AudioDeviceID) -> String? {
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioDevicePropertyDeviceUID,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: kAudioObjectPropertyElementMain
+        )
+
+        var uid: CFString?
+        var dataSize = UInt32(MemoryLayout<CFString?>.size)
+        let status = withUnsafeMutablePointer(to: &uid) { pointer in
+            AudioObjectGetPropertyData(deviceID, &address, 0, nil, &dataSize, pointer)
+        }
+
+        guard status == noErr,
+              let uid,
+              !(uid as String).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return nil
+        }
+
+        return uid as String
     }
 
     private func volumeAddress(element: AudioObjectPropertyElement) -> AudioObjectPropertyAddress {
