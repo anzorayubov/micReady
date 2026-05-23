@@ -43,6 +43,7 @@ struct ContentView: View {
         Group {
             if monitor.isActive || monitor.lastTriggeredApp != nil {
                 StatusView()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
 
