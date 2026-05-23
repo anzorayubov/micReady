@@ -18,9 +18,9 @@ struct VolumeControlView: View {
                         isRenamingDevices.toggle()
                     } label: {
                         Image(systemName: "pencil")
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(isRenamingDevices ? .accentColor : .secondary)
-                            .frame(width: 18, height: 18)
+                            .frame(width: 22, height: 22)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(settings.text(.renameMicrophone))
