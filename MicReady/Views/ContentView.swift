@@ -42,12 +42,16 @@ struct ContentView: View {
             CommandShortcutHandler(
                 onCommandE: {
                     guard currentScreen == .main else { return false }
-                    inputDeviceEditing.enableEditing()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        inputDeviceEditing.enableEditing()
+                    }
                     return true
                 },
                 onCommandS: {
                     guard inputDeviceEditing.isEditing else { return false }
-                    inputDeviceEditing.saveEditing()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        inputDeviceEditing.saveEditing()
+                    }
                     return true
                 }
             )

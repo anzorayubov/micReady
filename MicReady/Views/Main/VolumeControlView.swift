@@ -17,7 +17,9 @@ struct VolumeControlView: View {
                     Spacer()
 
                     Button {
-                        inputDeviceEditing.toggleEditing()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            inputDeviceEditing.toggleEditing()
+                        }
                     } label: {
                         Image(systemName: "pencil")
                             .font(.system(size: 16, weight: .semibold))
@@ -79,8 +81,8 @@ struct VolumeControlView: View {
 
 private struct InputDeviceRow: View {
     private enum Layout {
-        static let rowHeight: CGFloat = 34
-        static let nameHeight: CGFloat = 22
+        static let rowHeight: CGFloat = 40
+        static let nameHeight: CGFloat = 28
     }
 
     @EnvironmentObject var monitor: MicrophoneMonitor
@@ -91,99 +93,119 @@ private struct InputDeviceRow: View {
 
     @State private var draftName = ""
     @State private var isHovered = false
+    @State private var editProgress: CGFloat = 0
 
     var body: some View {
         let isHidden = monitor.isInputDeviceHidden(device)
 
-        Group {
-            if isEditingEnabled {
-                HStack(spacing: 8) {
-                    Image(systemName: monitor.selectedInputDeviceID == device.id ? "largecircle.fill.circle" : "circle")
-                        .font(.system(size: 14))
-                        .foregroundColor(monitor.selectedInputDeviceID == device.id ? .accentColor : .secondary)
+        HStack(spacing: 8) {
+            selectionIcon
 
-                    nameContent
+            nameContent
 
-                    Spacer(minLength: 0)
-
-                    if monitor.canHideInputDevice(device) {
-                        Button {
-                            toggleHidden()
-                        } label: {
-                            Image(systemName: isHidden ? "eye.slash" : "eye")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(isHidden ? .secondary : .accentColor)
-                                .frame(width: 22, height: 22)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
-                        .help(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
-                    }
-                }
-                .opacity(isHidden ? 0.55 : 1)
-            } else {
-                Button {
-                    monitor.selectInputDevice(device.id)
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: monitor.selectedInputDeviceID == device.id ? "largecircle.fill.circle" : "circle")
-                            .font(.system(size: 14))
-                            .foregroundColor(monitor.selectedInputDeviceID == device.id ? .accentColor : .secondary)
-
-                        nameContent
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+            if isEditingEnabled, monitor.canHideInputDevice(device) {
+                hiddenButton
             }
         }
+        .opacity(isHidden ? 0.55 : 1)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 10)
         .frame(height: Layout.rowHeight)
         .background(isHovered ? Color(NSColor.quaternaryLabelColor).opacity(0.14) : Color.clear)
         .contentShape(Rectangle())
+        .onTapGesture {
+            guard !isEditingEnabled else { return }
+            monitor.selectInputDevice(device.id)
+        }
         .onHover { hovering in
             isHovered = hovering
         }
         .onChange(of: monitor.customInputDeviceNames) { _ in
             guard !isEditingEnabled else { return }
-            draftName = monitor.editableInputDeviceName(for: device)
+            draftName = monitor.inputDeviceDisplayName(for: device)
         }
         .onChange(of: isEditingEnabled) { isEditing in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                editProgress = isEditing ? 1 : 0
+            }
+
             if isEditing {
                 draftName = monitor.editableInputDeviceName(for: device)
             } else {
                 commitEditing()
+                draftName = monitor.inputDeviceDisplayName(for: device)
             }
         }
         .onAppear {
-            draftName = monitor.editableInputDeviceName(for: device)
+            editProgress = isEditingEnabled ? 1 : 0
+            draftName = isEditingEnabled
+                ? monitor.editableInputDeviceName(for: device)
+                : monitor.inputDeviceDisplayName(for: device)
         }
+        .animation(.easeInOut(duration: 0.2), value: isEditingEnabled)
     }
 
-    @ViewBuilder
     private var nameContent: some View {
-        if isEditingEnabled {
-            TextField(
-                settings.text(.renameMicrophonePlaceholder),
-                text: $draftName
-            )
-            .textFieldStyle(.plain)
-            .font(.system(size: 14))
-            .frame(height: Layout.nameHeight)
-            .disabled(!monitor.canRenameInputDevice(device))
-            .onSubmit {
-                commitEditing()
+        let canRename = monitor.canRenameInputDevice(device)
+
+        return Group {
+            if isEditingEnabled {
+                TextField(
+                    settings.text(.renameMicrophonePlaceholder),
+                    text: $draftName
+                )
+                .textFieldStyle(.plain)
+                .disabled(!canRename)
+                .onSubmit {
+                    commitEditing()
+                }
+            } else {
+                Text(draftName)
+                    .lineLimit(1)
             }
-        } else {
-            Text(monitor.inputDeviceDisplayName(for: device))
-                .font(.system(size: 14))
-                .foregroundColor(.primary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: Layout.nameHeight)
-                .lineLimit(1)
         }
+        .font(.system(size: 14))
+        .foregroundColor(!isEditingEnabled || canRename ? .primary : .secondary)
+        .padding(.horizontal, editProgress * 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: Layout.nameHeight)
+        .background(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(canRename ? Color(NSColor.textBackgroundColor) : Color(NSColor.controlBackgroundColor))
+                .opacity(editProgress)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .stroke(
+                    canRename ? Color.accentColor.opacity(0.35) : Color(NSColor.separatorColor).opacity(0.7),
+                    lineWidth: 1
+                )
+                .opacity(editProgress)
+        )
+        .animation(.easeInOut(duration: 0.2), value: editProgress)
+    }
+
+    private var hiddenButton: some View {
+        let isHidden = monitor.isInputDeviceHidden(device)
+
+        return Button {
+            toggleHidden()
+        } label: {
+            Image(systemName: isHidden ? "eye.slash" : "eye")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(isHidden ? .secondary : .accentColor)
+                .frame(width: 22, height: 22)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
+        .help(settings.text(isHidden ? .showMicrophoneSource : .hideMicrophoneSource))
+        .transition(.move(edge: .trailing).combined(with: .opacity))
+    }
+
+    private var selectionIcon: some View {
+        Image(systemName: monitor.selectedInputDeviceID == device.id ? "largecircle.fill.circle" : "circle")
+            .font(.system(size: 14))
+            .foregroundColor(monitor.selectedInputDeviceID == device.id ? .accentColor : .secondary)
     }
 
     private func commitEditing() {
