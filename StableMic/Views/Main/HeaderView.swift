@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct HeaderView: View {
@@ -24,20 +25,32 @@ struct HeaderView: View {
                 Image(systemName: "mic.fill")
                     .foregroundColor(monitor.isActive ? .green : .secondary)
                     .font(.system(size: 14, weight: .semibold))
-                Text("MicReady")
+                Text("StableMic")
                     .font(.system(size: 14, weight: .semibold))
             }
 
             Spacer()
 
             if currentScreen == .main {
-                Button(action: openSettings) {
+                Menu {
+                    Button(action: openSettings) {
+                        Label(settings.text(.settingsTitle), systemImage: "gearshape")
+                    }
+
+                    Divider()
+
+                    Button(action: { NSApp.terminate(nil) }) {
+                        Label(settings.text(.quit), systemImage: "power")
+                    }
+                } label: {
                     Image(systemName: "gearshape.fill")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(.secondary)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 22, height: 22)
                 }
-                .buttonStyle(.plain)
+                .menuStyle(.borderlessButton)
+                .menuIndicator(.hidden)
+                .fixedSize()
                 .accessibilityLabel(settings.text(.settingsTitle))
             }
         }

@@ -6,7 +6,7 @@ import Foundation
 final class MicrophoneMonitor: ObservableObject {
     static let shared = MicrophoneMonitor()
 
-    static let supportedTargetVolumeSteps: [Float] = [0.0, 0.25, 0.5, 0.75, 1.0]
+    static let targetVolumeStep: Float = 0.05
 
     @Published var watchedApps: [WatchedApp] = [] {
         didSet { settingsStore.saveWatchedApps(watchedApps) }
@@ -239,9 +239,8 @@ final class MicrophoneMonitor: ObservableObject {
 
     private func snappedVolume(for volume: Float) -> Float {
         let clampedVolume = min(max(volume, 0), 1)
-        return Self.supportedTargetVolumeSteps.min(by: {
-            abs($0 - clampedVolume) < abs($1 - clampedVolume)
-        }) ?? 1.0
+        let snappedVolume = (clampedVolume / Self.targetVolumeStep).rounded() * Self.targetVolumeStep
+        return min(max(snappedVolume, 0), 1)
     }
 
     private func activeInputDeviceID() -> AudioDeviceID? {

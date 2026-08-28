@@ -70,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         if let micImage = NSImage(
             systemSymbolName: "mic.fill",
-            accessibilityDescription: "MicReady"
+            accessibilityDescription: "StableMic"
         )?.withSymbolConfiguration(micConfiguration) {
             micImage.size = size
             micImage.draw(

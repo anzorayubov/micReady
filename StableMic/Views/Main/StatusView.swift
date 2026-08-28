@@ -7,7 +7,7 @@ struct StatusView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if monitor.isActive, let app = monitor.lastTriggeredApp {
-                Text("\(settings.text(.statusActive)): \(app)")
+                Text(settings.text(.statusActiveFor(app)))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.green)
             } else if monitor.isActive {

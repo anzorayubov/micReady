@@ -3,16 +3,19 @@ import Foundation
 enum LocalizedText {
     case settingsTitle
     case statusActive
+    case statusActiveFor(String)
     case statusWaiting
     case statusTriggered(String)
     case statusNoApps
     case microphone
     case targetVolume
-    case autoMaintainVolume
+    case targetMicrophoneVolume
     case microphoneSource
+    case watchedApplications
     case emptyTitle
     case emptySubtitle
     case addApplication
+    case removeApplication
     case quit
     case languageSectionTitle
     case languageSectionDescription

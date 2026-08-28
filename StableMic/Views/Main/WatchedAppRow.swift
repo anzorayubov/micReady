@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 
 struct WatchedAppRow: View {
+    @EnvironmentObject var settings: AppSettings
     @Binding var app: WatchedApp
     let onDelete: () -> Void
 
@@ -27,15 +28,14 @@ struct WatchedAppRow: View {
             Toggle("", isOn: $app.isEnabled)
                 .toggleStyle(.switch)
                 .controlSize(.small)
-
-            Button(action: onDelete) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.secondary)
-                    .font(.system(size: 14))
-            }
-            .buttonStyle(.borderless)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
+        .contentShape(Rectangle())
+        .contextMenu {
+            Button(role: .destructive, action: onDelete) {
+                Label(settings.text(.removeApplication), systemImage: "trash")
+            }
+        }
     }
 }

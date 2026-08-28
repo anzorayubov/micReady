@@ -75,15 +75,35 @@ struct ContentView: View {
 
             Divider()
 
-            if monitor.watchedApps.isEmpty {
-                EmptyStateView()
-            } else {
-                WatchedAppsListView()
+            HStack {
+                Text(settings.text(.watchedApplications))
+                    .font(.system(size: 12, weight: .semibold))
+
+                Spacer()
+
+                Button(action: { showAppPicker = true }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 15, weight: .semibold))
+                        .frame(width: 22, height: 22)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(settings.text(.addApplication))
+                .help(settings.text(.addApplication))
             }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+                .padding(.bottom, 4)
 
-            Divider()
+            Group {
+                if monitor.watchedApps.isEmpty {
+                    EmptyStateView()
+                } else {
+                    WatchedAppsListView()
+                }
+            }
+            .padding(.bottom, 6)
 
-            FooterView(showAppPicker: $showAppPicker)
         }
     }
 }

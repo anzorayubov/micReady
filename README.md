@@ -1,5 +1,5 @@
-# MicReady
-<img width="326" height="552" alt="image" src="https://github.com/user-attachments/assets/6bc37c64-81b7-4168-82b6-6be2f4862180" />
+# StableMic
+<img width="389" height="552" alt="Интерфейс MicReady" src="docs/screenshot.png" />
 
 Приложение для menu bar macOS, которое автоматически поддерживает выбранную громкость микрофона, когда запущены указанные приложения (Zoom, Teams, Google Meet и т.д.).
 
@@ -8,31 +8,74 @@
 - macOS 13.0+
 - Xcode 15+
 
-## Сборка
+## Сборка и установка в «Программы»
 
-1. Открой `MicReady.xcodeproj` в Xcode
-2. Выбери таргет `MicReady`
+### Через Terminal
+
+Из корня проекта выполни:
+
+```bash
+xcodebuild \
+  -project StableMic.xcodeproj \
+  -scheme StableMic \
+  -configuration Release \
+  -destination 'platform=macOS' \
+  -derivedDataPath /tmp/StableMicBuild \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+
+ditto \
+  /tmp/StableMicBuild/Build/Products/Release/StableMic.app \
+  /Applications/StableMic.app
+```
+
+После успешной сборки приложение появится в Finder → «Программы» (`/Applications/StableMic.app`). Запустить его можно оттуда или командой:
+
+```bash
+open /Applications/StableMic.app
+```
+
+Если Terminal сообщит, что для записи в `/Applications` недостаточно прав, повтори только команду `ditto` с `sudo`.
+
+### Через Xcode
+
+1. Открой `StableMic.xcodeproj` в Xcode
+2. Выбери таргет `StableMic`
 3. В настройках Signing & Capabilities — укажи свой Apple ID (бесплатный достаточно)
-4. `Cmd+R` — собрать и запустить
+4. Выбери Product → Archive
+5. В открывшемся Organizer нажми Distribute App → Copy App
+6. Сохрани `StableMic.app`, затем перенеси его в Finder → «Программы»
+
+Для обычной отладки можно использовать `Cmd+R`: Xcode соберёт и запустит приложение, но не установит его в папку «Программы».
+
+### Live reload
+
+Запусти из корня проекта:
+
+```bash
+./dev.sh
+```
+
+Перед запуском останови текущую сессию Xcode кнопкой Stop. Скрипт отслеживает изменения исходников и настроек проекта, автоматически пересобирает и перезапускает StableMic. Зависший экземпляр будет принудительно завершён, а одновременный запуск двух watcher-процессов заблокирован. Ошибка сборки не останавливает наблюдение: после следующего сохранения будет выполнена новая попытка. Для остановки нажми `Ctrl+C`.
 
 ## Добавление в автозапуск
 
-После первого запуска: Настройки macOS → Основные → Объекты входа → добавь MicReady.app
+После первого запуска: Настройки macOS → Основные → Объекты входа → добавь StableMic.app
 
 ## Как работает
 
 - Каждые 2 секунды проверяет список запущенных приложений
 - При выборе конкретного источника в интерфейсе переключает системный input device macOS на этот микрофон
 - Если запущено хотя бы одно из отслеживаемых — поддерживает выбранную громкость микрофона через CoreAudio API
-- Целевую громкость можно выбрать в popover с помощью горизонтального ползунка с шагами `0 / 25 / 50 / 75 / 100`
+- Целевую громкость можно выбрать в popover с помощью горизонтального ползунка с шагом 5%
 - Настройки сохраняются в UserDefaults между запусками
 - Иконка в menu bar показывает текущий статус (зелёная = активен)
 
 ## Структура файлов
 
 ```
-MicReady/
-├── MicReadyApp.swift              # Точка входа
+StableMic/
+├── StableMicApp.swift             # Точка входа
 ├── AppDelegate.swift              # Menu bar иконка и popover
 ├── MicrophoneMonitor.swift        # Оркестрация мониторинга
 ├── Models/
@@ -60,7 +103,7 @@ MicReady/
 │   │   └── WatchedAppsListView.swift
 │   └── Settings/
 │       └── SettingsView.swift
-└── MicReady.entitlements          # Права доступа к аудио
+└── StableMic.entitlements         # Права доступа к аудио
 ```
 
 ## Известные ограничения

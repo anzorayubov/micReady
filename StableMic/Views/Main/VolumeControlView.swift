@@ -9,6 +9,27 @@ struct VolumeControlView: View {
         let inputDevices = inputDeviceEditing.isEditing ? monitor.availableInputDevices : monitor.visibleInputDevices
 
         VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(settings.text(.targetMicrophoneVolume))
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+                Text("\(Int((monitor.targetMicVolume * 100).rounded()))%")
+                    .font(.system(size: 12, weight: .semibold))
+                    .monospacedDigit()
+            }
+
+            Slider(
+                value: Binding(
+                    get: { Double(monitor.targetMicVolume) },
+                    set: { monitor.updateTargetMicVolume(to: Float($0)) }
+                ),
+                in: 0...1
+            )
+            .tint(.accentColor)
+
+            Divider()
+                .padding(.horizontal, -16)
+
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 8) {
                     Text(settings.text(.microphoneSource))
@@ -46,34 +67,6 @@ struct VolumeControlView: View {
                 }
                 .background(Color(NSColor.controlBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            }
-
-            HStack {
-                Text(settings.text(.autoMaintainVolume))
-                    .font(.system(size: 12, weight: .semibold))
-                Spacer()
-                Text("\(Int(monitor.targetMicVolume * 100))%")
-                    .font(.system(size: 12, weight: .semibold))
-                    .monospacedDigit()
-            }
-
-            Slider(
-                value: Binding(
-                    get: { Double(monitor.targetMicVolume) },
-                    set: { monitor.updateTargetMicVolume(to: Float($0)) }
-                ),
-                in: 0...1
-            )
-            .tint(.accentColor)
-
-            HStack {
-                ForEach(MicrophoneMonitor.supportedTargetVolumeSteps, id: \.self) { step in
-                    Text("\(Int(step * 100))")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .monospacedDigit()
-                }
             }
         }
     }

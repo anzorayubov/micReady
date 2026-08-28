@@ -1,4 +1,3 @@
-import AppKit
 import SwiftUI
 
 struct FooterView: View {
@@ -9,18 +8,12 @@ struct FooterView: View {
         HStack {
             Button(action: { showAppPicker = true }) {
                 Label(settings.text(.addApplication), systemImage: "plus")
-                    .font(.system(size: 12))
+                    .font(.system(size: 12, weight: .semibold))
             }
-            .buttonStyle(.borderless)
+            .buttonStyle(.bordered)
+            .controlSize(.regular)
 
             Spacer()
-
-            Button(action: { NSApp.terminate(nil) }) {
-                Text(settings.text(.quit))
-                    .font(.system(size: 12))
-                    .foregroundColor(.secondary)
-            }
-            .buttonStyle(.borderless)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)

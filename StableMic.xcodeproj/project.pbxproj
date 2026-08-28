@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1000001 /* MicReadyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001 /* MicReadyApp.swift */; };
+		A1000001 /* StableMicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001 /* StableMicApp.swift */; };
 		A1000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* AppDelegate.swift */; };
 		A1000003 /* MicrophoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000003 /* MicrophoneMonitor.swift */; };
 		A1000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000005 /* Assets.xcassets */; };
@@ -32,7 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A2000001 /* MicReadyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicReadyApp.swift; sourceTree = "<group>"; };
+		A2000001 /* StableMicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableMicApp.swift; sourceTree = "<group>"; };
 		A2000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2000003 /* MicrophoneMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneMonitor.swift; sourceTree = "<group>"; };
 		A2000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 		A2000021 /* WatchedAppRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedAppRow.swift; sourceTree = "<group>"; };
 		A2000022 /* WatchedAppsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedAppsListView.swift; sourceTree = "<group>"; };
 		A2000023 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		A3000001 /* MicReady.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MicReady.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3000001 /* StableMic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StableMic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,15 +71,15 @@
 		A5000001 = {
 			isa = PBXGroup;
 			children = (
-				A5000002 /* MicReady */,
+				A5000002 /* StableMic */,
 				A5000003 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		A5000002 /* MicReady */ = {
+		A5000002 /* StableMic */ = {
 			isa = PBXGroup;
 			children = (
-				A2000001 /* MicReadyApp.swift */,
+				A2000001 /* StableMicApp.swift */,
 				A2000002 /* AppDelegate.swift */,
 				A2000003 /* MicrophoneMonitor.swift */,
 				A5000004 /* Models */,
@@ -88,13 +88,13 @@
 				A5000007 /* Views */,
 				A2000005 /* Assets.xcassets */,
 			);
-			path = MicReady;
+			path = StableMic;
 			sourceTree = "<group>";
 		};
 		A5000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A3000001 /* MicReady.app */,
+				A3000001 /* StableMic.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,9 +172,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A6000001 /* MicReady */ = {
+		A6000001 /* StableMic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A7000001 /* Build configuration list for PBXNativeTarget "MicReady" */;
+			buildConfigurationList = A7000001 /* Build configuration list for PBXNativeTarget "StableMic" */;
 			buildPhases = (
 				A8000001 /* Sources */,
 				A4000001 /* Frameworks */,
@@ -184,9 +184,9 @@
 			);
 			dependencies = (
 			);
-			name = MicReady;
-			productName = MicReady;
-			productReference = A3000001 /* MicReady.app */;
+			name = StableMic;
+			productName = StableMic;
+			productReference = A3000001 /* StableMic.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -204,7 +204,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A7000002 /* Build configuration list for PBXProject "MicReady" */;
+			buildConfigurationList = A7000002 /* Build configuration list for PBXProject "StableMic" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -217,7 +217,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A6000001 /* MicReady */,
+				A6000001 /* StableMic */,
 			);
 		};
 /* End PBXProject section */
@@ -238,7 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1000001 /* MicReadyApp.swift in Sources */,
+				A1000001 /* StableMicApp.swift in Sources */,
 				A1000002 /* AppDelegate.swift in Sources */,
 				A1000003 /* MicrophoneMonitor.swift in Sources */,
 				A1000006 /* AudioInputDevice.swift in Sources */,
@@ -387,19 +387,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MicReady/MicReady.entitlements;
+				CODE_SIGN_ENTITLEMENTS = StableMic/StableMic.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MicReady needs microphone access to monitor and set input volume.";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "MicReady uses Apple Events to detect running applications.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "StableMic needs microphone access to monitor and set input volume.";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "StableMic uses Apple Events to detect running applications.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.micready.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stablemic.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -412,19 +412,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = MicReady/MicReady.entitlements;
+				CODE_SIGN_ENTITLEMENTS = StableMic/StableMic.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "MicReady needs microphone access to monitor and set input volume.";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "MicReady uses Apple Events to detect running applications.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "StableMic needs microphone access to monitor and set input volume.";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "StableMic uses Apple Events to detect running applications.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.micready.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stablemic.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -435,7 +435,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A7000001 /* Build configuration list for PBXNativeTarget "MicReady" */ = {
+		A7000001 /* Build configuration list for PBXNativeTarget "StableMic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB000003 /* Debug */,
@@ -444,7 +444,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A7000002 /* Build configuration list for PBXProject "MicReady" */ = {
+		A7000002 /* Build configuration list for PBXProject "StableMic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB000001 /* Debug */,
