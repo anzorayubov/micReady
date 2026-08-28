@@ -16,7 +16,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover.contentSize = NSSize(width: 320, height: 540)
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(
-            rootView: ContentView()
+            rootView: ContentView { [weak popover] in
+                popover?.performClose(nil)
+            }
                 .environmentObject(MicrophoneMonitor.shared)
                 .environmentObject(AppSettings.shared)
                 .environmentObject(InputDeviceEditingController.shared)
@@ -41,6 +43,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         MicrophoneMonitor.shared.startMonitoring()
     }
 
+    func applicationDidResignActive(_ notification: Notification) {
+        popover?.performClose(nil)
+    }
+
     @objc func togglePopover() {
         guard let button = statusItem?.button else { return }
         if let popover = popover {
@@ -49,11 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             } else {
                 NSApp.activate(ignoringOtherApps: true)
                 popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-                DispatchQueue.main.async {
-                    NSApp.activate(ignoringOtherApps: true)
-                    popover.contentViewController?.view.window?.makeKey()
-                    popover.contentViewController?.view.window?.orderFrontRegardless()
-                }
+                popover.contentViewController?.view.window?.makeKey()
             }
         }
     }

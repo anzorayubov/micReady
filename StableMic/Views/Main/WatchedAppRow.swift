@@ -28,6 +28,12 @@ struct WatchedAppRow: View {
             Toggle("", isOn: $app.isEnabled)
                 .toggleStyle(.switch)
                 .controlSize(.small)
+
+            Button(role: .destructive, action: onDelete) {
+                Image(systemName: "trash")
+            }
+            .buttonStyle(.borderless)
+            .help(settings.text(.removeApplication))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)

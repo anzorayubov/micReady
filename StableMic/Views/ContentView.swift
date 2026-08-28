@@ -5,6 +5,7 @@ struct ContentView: View {
     @EnvironmentObject var monitor: MicrophoneMonitor
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var inputDeviceEditing: InputDeviceEditingController
+    let onClose: () -> Void
     @State private var showAppPicker = false
     @State private var currentScreen: Screen = .main
 
@@ -56,6 +57,7 @@ struct ContentView: View {
                 }
             )
         )
+        .onExitCommand(perform: onClose)
     }
 
     private var mainContentView: some View {

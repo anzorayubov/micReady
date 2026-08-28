@@ -19,8 +19,10 @@ final class MicrophoneMonitor: ObservableObject {
     @Published private(set) var selectedInputDeviceID = AudioInputDevice.systemDefaultID
     @Published private(set) var customInputDeviceNames: [String: String] = [:]
     @Published private(set) var hiddenInputDeviceIDs: Set<String> = []
+    @Published private(set) var inputDeviceSwitchErrorID: String?
 
     private var timer: Timer?
+    private var inputDeviceSwitchErrorResetID: UUID?
     private let settingsStore: SettingsStore
     private let audioDeviceService: AudioDeviceService
     private let installedAppsService: InstalledAppsService
@@ -50,6 +52,8 @@ final class MicrophoneMonitor: ObservableObject {
     }
 
     func startMonitoring() {
+        guard timer == nil else { return }
+
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
             self?.checkAndSetMicVolume()
         }
@@ -89,11 +93,20 @@ final class MicrophoneMonitor: ObservableObject {
             return
         }
 
-        if let selectedDevice = availableInputDevices.first(where: { $0.id == deviceID }),
-           let audioDeviceID = selectedDevice.deviceID {
-            _ = audioDeviceService.setDefaultInputDevice(deviceID: audioDeviceID)
+        if deviceID != AudioInputDevice.systemDefaultID {
+            guard let selectedDevice = availableInputDevices.first(where: { $0.id == deviceID }),
+                  let audioDeviceID = selectedDevice.deviceID else {
+                showInputDeviceSwitchError(for: deviceID)
+                return
+            }
+
+            guard audioDeviceService.setDefaultInputDevice(deviceID: audioDeviceID) else {
+                showInputDeviceSwitchError(for: deviceID)
+                return
+            }
         }
 
+        clearInputDeviceSwitchError()
         selectedInputDeviceID = deviceID
         settingsStore.saveSelectedInputDeviceID(deviceID)
 
@@ -252,6 +265,22 @@ final class MicrophoneMonitor: ObservableObject {
 
     private func currentDefaultDeviceID() -> String? {
         audioDeviceService.currentDefaultInputDeviceSelectionID()
+    }
+
+    private func showInputDeviceSwitchError(for deviceID: String) {
+        let resetID = UUID()
+        inputDeviceSwitchErrorResetID = resetID
+        inputDeviceSwitchErrorID = deviceID
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard self?.inputDeviceSwitchErrorResetID == resetID else { return }
+            self?.clearInputDeviceSwitchError()
+        }
+    }
+
+    private func clearInputDeviceSwitchError() {
+        inputDeviceSwitchErrorResetID = nil
+        inputDeviceSwitchErrorID = nil
     }
 
     private func fallbackInputDeviceID(in devices: [AudioInputDevice]? = nil) -> String {

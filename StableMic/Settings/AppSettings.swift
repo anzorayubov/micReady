@@ -168,6 +168,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "Название микрофона"
             case .hideMicrophoneSource: return "Скрыть источник"
             case .showMicrophoneSource: return "Показать источник"
+            case .microphoneSwitchError: return "Произошла ошибка"
             }
         case .english, .system:
             switch key {
@@ -199,6 +200,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "Microphone name"
             case .hideMicrophoneSource: return "Hide microphone source"
             case .showMicrophoneSource: return "Show microphone source"
+            case .microphoneSwitchError: return "An error occurred"
             }
         case .chineseSimplified:
             switch key {
@@ -230,6 +232,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "麦克风名称"
             case .hideMicrophoneSource: return "隐藏麦克风来源"
             case .showMicrophoneSource: return "显示麦克风来源"
+            case .microphoneSwitchError: return "发生错误"
             }
         case .hindi:
             switch key {
@@ -261,6 +264,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "माइक्रोफोन का नाम"
             case .hideMicrophoneSource: return "माइक्रोफोन स्रोत छिपाएं"
             case .showMicrophoneSource: return "माइक्रोफोन स्रोत दिखाएं"
+            case .microphoneSwitchError: return "एक त्रुटि हुई"
             }
         case .spanish:
             switch key {
@@ -292,6 +296,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "Nombre del microfono"
             case .hideMicrophoneSource: return "Ocultar fuente del microfono"
             case .showMicrophoneSource: return "Mostrar fuente del microfono"
+            case .microphoneSwitchError: return "Se produjo un error"
             }
         case .french:
             switch key {
@@ -323,6 +328,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "Nom du microphone"
             case .hideMicrophoneSource: return "Masquer la source du microphone"
             case .showMicrophoneSource: return "Afficher la source du microphone"
+            case .microphoneSwitchError: return "Une erreur est survenue"
             }
         case .arabic:
             switch key {
@@ -354,6 +360,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "اسم الميكروفون"
             case .hideMicrophoneSource: return "إخفاء مصدر الميكروفون"
             case .showMicrophoneSource: return "إظهار مصدر الميكروفون"
+            case .microphoneSwitchError: return "حدث خطأ"
             }
         case .bengali:
             switch key {
@@ -385,6 +392,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "মাইক্রোফোনের নাম"
             case .hideMicrophoneSource: return "মাইক্রোফোন উৎস লুকান"
             case .showMicrophoneSource: return "মাইক্রোফোন উৎস দেখান"
+            case .microphoneSwitchError: return "একটি ত্রুটি ঘটেছে"
             }
         case .portuguese:
             switch key {
@@ -416,6 +424,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "Nome do microfone"
             case .hideMicrophoneSource: return "Ocultar fonte do microfone"
             case .showMicrophoneSource: return "Mostrar fonte do microfone"
+            case .microphoneSwitchError: return "Ocorreu um erro"
             }
         case .urdu:
             switch key {
@@ -447,6 +456,7 @@ final class AppSettings: ObservableObject {
             case .renameMicrophonePlaceholder: return "مائیکروفون کا نام"
             case .hideMicrophoneSource: return "مائیکروفون ماخذ چھپائیں"
             case .showMicrophoneSource: return "مائیکروفون ماخذ دکھائیں"
+            case .microphoneSwitchError: return "ایک خرابی پیش آگئی"
             }
         }
     }

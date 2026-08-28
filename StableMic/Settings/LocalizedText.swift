@@ -29,4 +29,5 @@ enum LocalizedText {
     case renameMicrophonePlaceholder
     case hideMicrophoneSource
     case showMicrophoneSource
+    case microphoneSwitchError
 }

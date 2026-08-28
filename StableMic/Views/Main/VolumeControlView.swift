@@ -29,6 +29,7 @@ struct VolumeControlView: View {
 
             Divider()
                 .padding(.horizontal, -16)
+                .padding(.top, 2)
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 8) {
@@ -67,7 +68,15 @@ struct VolumeControlView: View {
                 }
                 .background(Color(NSColor.controlBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+                if monitor.inputDeviceSwitchErrorID != nil {
+                    Text(settings.text(.microphoneSwitchError))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(.red)
+                        .transition(.opacity)
+                }
             }
+            .animation(.easeInOut(duration: 0.2), value: monitor.inputDeviceSwitchErrorID)
         }
     }
 }
@@ -140,6 +149,7 @@ private struct InputDeviceRow: View {
 
     private var nameContent: some View {
         let canRename = monitor.canRenameInputDevice(device)
+        let hasSwitchError = monitor.inputDeviceSwitchErrorID == device.id
 
         return Group {
             if isEditingEnabled {
@@ -158,7 +168,7 @@ private struct InputDeviceRow: View {
             }
         }
         .font(.system(size: 14))
-        .foregroundColor(!isEditingEnabled || canRename ? .primary : .secondary)
+        .foregroundColor(hasSwitchError ? .red : (!isEditingEnabled || canRename ? .primary : .secondary))
         .padding(.horizontal, editProgress * 8)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: Layout.nameHeight)
