@@ -2,11 +2,9 @@ import AppKit
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var monitor: MicrophoneMonitor
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var inputDeviceEditing: InputDeviceEditingController
     let onClose: () -> Void
-    @State private var showAppPicker = false
     @State private var currentScreen: Screen = .main
 
     enum Screen {
@@ -16,29 +14,26 @@ struct ContentView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HeaderView(currentScreen: currentScreen) {
-                currentScreen = .main
-            } openSettings: {
-                currentScreen = .settings
-            }
+            if currentScreen == .main {
+                mainContentView
 
-            Divider()
+                Divider()
 
-            Group {
-                if currentScreen == .main {
-                    mainContentView
-                } else {
-                    SettingsView()
+                MainFooterView {
+                    currentScreen = .settings
                 }
+            } else {
+                HeaderView {
+                    currentScreen = .main
+                }
+
+                Divider()
+
+                SettingsView()
             }
         }
         .frame(width: 320)
         .background(Color(NSColor.windowBackgroundColor))
-        .sheet(isPresented: $showAppPicker) {
-            AppPickerView()
-                .environmentObject(monitor)
-                .environmentObject(settings)
-        }
         .background(
             CommandShortcutHandler(
                 onCommandE: {
@@ -61,52 +56,39 @@ struct ContentView: View {
     }
 
     private var mainContentView: some View {
-        Group {
-            if monitor.isActive || monitor.lastTriggeredApp != nil {
-                StatusView()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+        VolumeControlView()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+    }
+}
 
-                Divider()
+private struct MainFooterView: View {
+    @EnvironmentObject var settings: AppSettings
+
+    let openSettings: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: openSettings) {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.secondary)
+                    .frame(width: 22, height: 22)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(settings.text(.settingsTitle))
+            .help(settings.text(.settingsTitle))
 
-            VolumeControlView()
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+            Spacer()
 
-            Divider()
-
-            HStack {
-                Text(settings.text(.watchedApplications))
+            Button(action: { NSApp.terminate(nil) }) {
+                Text(settings.text(.quit))
                     .font(.system(size: 12, weight: .semibold))
-
-                Spacer()
-
-                Button(action: { showAppPicker = true }) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 15, weight: .semibold))
-                        .frame(width: 22, height: 22)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(settings.text(.addApplication))
-                .help(settings.text(.addApplication))
             }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 16)
-                .padding(.top, 12)
-                .padding(.bottom, 4)
-
-            Group {
-                if monitor.watchedApps.isEmpty {
-                    EmptyStateView()
-                } else {
-                    WatchedAppsListView()
-                }
-            }
-            .padding(.bottom, 6)
-
+            .buttonStyle(.plain)
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
     }
 }
 

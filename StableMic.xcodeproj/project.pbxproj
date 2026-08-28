@@ -12,22 +12,13 @@
 		A1000003 /* MicrophoneMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000003 /* MicrophoneMonitor.swift */; };
 		A1000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000005 /* Assets.xcassets */; };
 		A1000006 /* AudioInputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000006 /* AudioInputDevice.swift */; };
-		A1000007 /* WatchedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000007 /* WatchedApp.swift */; };
 		A1000008 /* AudioDeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000008 /* AudioDeviceService.swift */; };
-		A1000009 /* InstalledAppsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000009 /* InstalledAppsService.swift */; };
 		A1000010 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000010 /* SettingsStore.swift */; };
 		A1000011 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000011 /* AppSettings.swift */; };
 		A1000012 /* LocalizedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000012 /* LocalizedText.swift */; };
-		A1000013 /* AppIconProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000013 /* AppIconProvider.swift */; };
-		A1000014 /* AppPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000014 /* AppPickerView.swift */; };
 		A1000015 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000015 /* ContentView.swift */; };
-		A1000016 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000016 /* EmptyStateView.swift */; };
-		A1000017 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000017 /* FooterView.swift */; };
 		A1000018 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000018 /* HeaderView.swift */; };
-		A1000019 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000019 /* StatusView.swift */; };
 		A1000020 /* VolumeControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000020 /* VolumeControlView.swift */; };
-		A1000021 /* WatchedAppRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000021 /* WatchedAppRow.swift */; };
-		A1000022 /* WatchedAppsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022 /* WatchedAppsListView.swift */; };
 		A1000023 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000023 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,22 +28,13 @@
 		A2000003 /* MicrophoneMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneMonitor.swift; sourceTree = "<group>"; };
 		A2000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000006 /* AudioInputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioInputDevice.swift; sourceTree = "<group>"; };
-		A2000007 /* WatchedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedApp.swift; sourceTree = "<group>"; };
 		A2000008 /* AudioDeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDeviceService.swift; sourceTree = "<group>"; };
-		A2000009 /* InstalledAppsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstalledAppsService.swift; sourceTree = "<group>"; };
 		A2000010 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		A2000011 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		A2000012 /* LocalizedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedText.swift; sourceTree = "<group>"; };
-		A2000013 /* AppIconProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconProvider.swift; sourceTree = "<group>"; };
-		A2000014 /* AppPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerView.swift; sourceTree = "<group>"; };
 		A2000015 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		A2000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		A2000017 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		A2000018 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		A2000019 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
 		A2000020 /* VolumeControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeControlView.swift; sourceTree = "<group>"; };
-		A2000021 /* WatchedAppRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedAppRow.swift; sourceTree = "<group>"; };
-		A2000022 /* WatchedAppsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchedAppsListView.swift; sourceTree = "<group>"; };
 		A2000023 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A3000001 /* StableMic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StableMic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -103,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				A2000006 /* AudioInputDevice.swift */,
-				A2000007 /* WatchedApp.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -112,7 +93,6 @@
 			isa = PBXGroup;
 			children = (
 				A2000008 /* AudioDeviceService.swift */,
-				A2000009 /* InstalledAppsService.swift */,
 				A2000010 /* SettingsStore.swift */,
 			);
 			path = Services;
@@ -131,32 +111,17 @@
 			isa = PBXGroup;
 			children = (
 				A2000015 /* ContentView.swift */,
-				A5000008 /* AppPicker */,
 				A5000009 /* Main */,
 				A5000010 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A5000008 /* AppPicker */ = {
-			isa = PBXGroup;
-			children = (
-				A2000013 /* AppIconProvider.swift */,
-				A2000014 /* AppPickerView.swift */,
-			);
-			path = AppPicker;
-			sourceTree = "<group>";
-		};
 		A5000009 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				A2000016 /* EmptyStateView.swift */,
-				A2000017 /* FooterView.swift */,
 				A2000018 /* HeaderView.swift */,
-				A2000019 /* StatusView.swift */,
 				A2000020 /* VolumeControlView.swift */,
-				A2000021 /* WatchedAppRow.swift */,
-				A2000022 /* WatchedAppsListView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -242,22 +207,13 @@
 				A1000002 /* AppDelegate.swift in Sources */,
 				A1000003 /* MicrophoneMonitor.swift in Sources */,
 				A1000006 /* AudioInputDevice.swift in Sources */,
-				A1000007 /* WatchedApp.swift in Sources */,
 				A1000008 /* AudioDeviceService.swift in Sources */,
-				A1000009 /* InstalledAppsService.swift in Sources */,
 				A1000010 /* SettingsStore.swift in Sources */,
 				A1000011 /* AppSettings.swift in Sources */,
 				A1000012 /* LocalizedText.swift in Sources */,
-				A1000013 /* AppIconProvider.swift in Sources */,
-				A1000014 /* AppPickerView.swift in Sources */,
 				A1000015 /* ContentView.swift in Sources */,
-				A1000016 /* EmptyStateView.swift in Sources */,
-				A1000017 /* FooterView.swift in Sources */,
 				A1000018 /* HeaderView.swift in Sources */,
-				A1000019 /* StatusView.swift in Sources */,
 				A1000020 /* VolumeControlView.swift in Sources */,
-				A1000021 /* WatchedAppRow.swift in Sources */,
-				A1000022 /* WatchedAppsListView.swift in Sources */,
 				A1000023 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,7 +349,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "StableMic needs microphone access to monitor and set input volume.";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "StableMic uses Apple Events to detect running applications.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -418,7 +373,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "StableMic needs microphone access to monitor and set input volume.";
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "StableMic uses Apple Events to detect running applications.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

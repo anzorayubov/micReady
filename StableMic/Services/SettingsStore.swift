@@ -2,7 +2,6 @@ import Foundation
 
 final class SettingsStore {
     private let defaults: UserDefaults
-    private let watchedAppsKey = "watchedApps"
     private let targetMicVolumeKey = "targetMicVolume"
     private let selectedInputDeviceKey = "selectedInputDeviceID"
     private let customInputDeviceNamesKey = "customInputDeviceNames"
@@ -10,21 +9,6 @@ final class SettingsStore {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-    }
-
-    func loadWatchedApps() -> [WatchedApp] {
-        guard let data = defaults.data(forKey: watchedAppsKey),
-              let apps = try? JSONDecoder().decode([WatchedApp].self, from: data) else {
-            return defaultWatchedApps()
-        }
-
-        return apps
-    }
-
-    func saveWatchedApps(_ watchedApps: [WatchedApp]) {
-        if let data = try? JSONEncoder().encode(watchedApps) {
-            defaults.set(data, forKey: watchedAppsKey)
-        }
     }
 
     func loadTargetMicVolume(defaultValue: Float = 1.0) -> Float {
@@ -79,13 +63,5 @@ final class SettingsStore {
         if let data = try? JSONEncoder().encode(storedIDs) {
             defaults.set(data, forKey: hiddenInputDeviceIDsKey)
         }
-    }
-
-    private func defaultWatchedApps() -> [WatchedApp] {
-        [
-            WatchedApp(name: "Zoom", bundleIdentifier: "us.zoom.xos", isEnabled: true),
-            WatchedApp(name: "Microsoft Teams", bundleIdentifier: "com.microsoft.teams", isEnabled: true),
-            WatchedApp(name: "Google Chrome", bundleIdentifier: "com.google.Chrome", isEnabled: false),
-        ]
     }
 }

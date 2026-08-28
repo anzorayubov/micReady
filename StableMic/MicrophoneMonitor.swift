@@ -1,4 +1,3 @@
-import AppKit
 import Combine
 import CoreAudio
 import Foundation
@@ -8,12 +7,8 @@ final class MicrophoneMonitor: ObservableObject {
 
     static let targetVolumeStep: Float = 0.05
 
-    @Published var watchedApps: [WatchedApp] = [] {
-        didSet { settingsStore.saveWatchedApps(watchedApps) }
-    }
-    @Published var isActive = false
+    @Published private(set) var isActive = false
     @Published var currentMicVolume: Float = 0
-    @Published var lastTriggeredApp: String?
     @Published private(set) var targetMicVolume: Float = 1.0
     @Published private(set) var availableInputDevices: [AudioInputDevice] = []
     @Published private(set) var selectedInputDeviceID = AudioInputDevice.systemDefaultID
@@ -25,18 +20,14 @@ final class MicrophoneMonitor: ObservableObject {
     private var inputDeviceSwitchErrorResetID: UUID?
     private let settingsStore: SettingsStore
     private let audioDeviceService: AudioDeviceService
-    private let installedAppsService: InstalledAppsService
 
     init(
         settingsStore: SettingsStore = SettingsStore(),
-        audioDeviceService: AudioDeviceService = AudioDeviceService(),
-        installedAppsService: InstalledAppsService = InstalledAppsService()
+        audioDeviceService: AudioDeviceService = AudioDeviceService()
     ) {
         self.settingsStore = settingsStore
         self.audioDeviceService = audioDeviceService
-        self.installedAppsService = installedAppsService
 
-        watchedApps = settingsStore.loadWatchedApps()
         targetMicVolume = snappedVolume(for: settingsStore.loadTargetMicVolume())
         selectedInputDeviceID = settingsStore.loadSelectedInputDeviceID()
         customInputDeviceNames = settingsStore.loadCustomInputDeviceNames()
@@ -54,8 +45,9 @@ final class MicrophoneMonitor: ObservableObject {
     func startMonitoring() {
         guard timer == nil else { return }
 
+        isActive = true
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.checkAndSetMicVolume()
+            self?.enforceTargetMicVolume()
         }
         timer?.fire()
     }
@@ -63,6 +55,7 @@ final class MicrophoneMonitor: ObservableObject {
     func stopMonitoring() {
         timer?.invalidate()
         timer = nil
+        isActive = false
     }
 
     func updateTargetMicVolume(to volume: Float) {
@@ -222,32 +215,9 @@ final class MicrophoneMonitor: ObservableObject {
         }
     }
 
-    func getInstalledApps() -> [WatchedApp] {
-        installedAppsService.getInstalledApps()
-    }
-
-    private func checkAndSetMicVolume() {
+    private func enforceTargetMicVolume() {
         refreshInputDevices()
-
-        let runningApps = NSWorkspace.shared.runningApplications
-        let runningBundleIDs = Set(runningApps.compactMap { $0.bundleIdentifier })
-        let enabledWatchedBundleIDs = watchedApps
-            .filter { $0.isEnabled }
-            .map { $0.bundleIdentifier }
-        let triggered = enabledWatchedBundleIDs.first(where: { runningBundleIDs.contains($0) })
-
-        DispatchQueue.main.async {
-            if let triggeredID = triggered {
-                let appName = self.watchedApps.first(where: { $0.bundleIdentifier == triggeredID })?.name ?? triggeredID
-                self.lastTriggeredApp = appName
-                self.isActive = true
-                self.setMicInputVolume(to: self.targetMicVolume)
-            } else {
-                self.lastTriggeredApp = nil
-                self.isActive = false
-            }
-            self.refreshMicInputVolume()
-        }
+        setMicInputVolume(to: targetMicVolume)
     }
 
     private func snappedVolume(for volume: Float) -> Float {

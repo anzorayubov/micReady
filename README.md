@@ -1,7 +1,7 @@
 # StableMic
 <img width="389" height="552" alt="Интерфейс MicReady" src="docs/screenshot.png" />
 
-Приложение для menu bar macOS, которое автоматически поддерживает выбранную громкость микрофона, когда запущены указанные приложения (Zoom, Teams, Google Meet и т.д.).
+Приложение для menu bar macOS, которое автоматически поддерживает выбранную громкость микрофона всё время, пока запущено.
 
 ## Требования
 
@@ -64,9 +64,9 @@ open /Applications/StableMic.app
 
 ## Как работает
 
-- Каждые 2 секунды проверяет список запущенных приложений
+- Каждые 2 секунды восстанавливает выбранную громкость микрофона
 - При выборе конкретного источника в интерфейсе переключает системный input device macOS на этот микрофон
-- Если запущено хотя бы одно из отслеживаемых — поддерживает выбранную громкость микрофона через CoreAudio API
+- Поддерживает выбранную громкость микрофона через CoreAudio API всё время работы
 - Целевую громкость можно выбрать в popover с помощью горизонтального ползунка с шагом 5%
 - Настройки сохраняются в UserDefaults между запусками
 - Иконка в menu bar показывает текущий статус (зелёная = активен)
@@ -79,28 +79,18 @@ StableMic/
 ├── AppDelegate.swift              # Menu bar иконка и popover
 ├── MicrophoneMonitor.swift        # Оркестрация мониторинга
 ├── Models/
-│   ├── AudioInputDevice.swift     # Модель входного аудиоустройства
-│   └── WatchedApp.swift           # Модель отслеживаемого приложения
+│   └── AudioInputDevice.swift     # Модель входного аудиоустройства
 ├── Services/
 │   ├── AudioDeviceService.swift   # CoreAudio операции
-│   ├── InstalledAppsService.swift # Поиск установленных приложений
 │   └── SettingsStore.swift        # Persistence через UserDefaults
 ├── Settings/
 │   ├── AppSettings.swift          # Настройки и локализация
 │   └── LocalizedText.swift        # Ключи локализованных строк
 ├── Views/
 │   ├── ContentView.swift          # Root container интерфейса
-│   ├── AppPicker/
-│   │   ├── AppIconProvider.swift
-│   │   └── AppPickerView.swift
 │   ├── Main/
-│   │   ├── EmptyStateView.swift
-│   │   ├── FooterView.swift
 │   │   ├── HeaderView.swift
-│   │   ├── StatusView.swift
 │   │   ├── VolumeControlView.swift
-│   │   ├── WatchedAppRow.swift
-│   │   └── WatchedAppsListView.swift
 │   └── Settings/
 │       └── SettingsView.swift
 └── StableMic.entitlements         # Права доступа к аудио
